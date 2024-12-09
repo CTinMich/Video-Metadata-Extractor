@@ -16,7 +16,7 @@ A Python script that uses `ffprobe` to extract metadata from video files and gen
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/video-metadata-extractor.git
+   git clone https://github.com/CTinMich/video-metadata-extractor.git
    ```
 2. Navigate to the repository directory:
    ```bash
