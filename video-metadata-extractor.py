@@ -4,7 +4,7 @@
 Script for extracting metadata from video files and generating an Excel report.
 
 Author: Christopher Thomas
-Version: 1.6
+Version: 1.0
 Date: 2024-12-09
 
 Description:
