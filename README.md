@@ -28,12 +28,29 @@ A Python script that uses `ffprobe` to extract metadata from video files and gen
    ```
 
 ## Usage
-1. Update the `dirs` variable in the script with your directory paths.
-2. Run the script:
+1. Open the script `video_metadata_extractor.py` in a text editor or IDE.
+2. Locate the following lines:
+   ```python
+   dirs = []  # Add your video directory paths here.
+   output_path = ""  # Specify where the Excel report should be saved.
+   ```
+   - Add the paths to your video directories. For example:
+     ```python
+     dirs = ["/path/to/videos", "/another/path/to/videos"]
+     ```
+   - Specify the output path for the report. For example:
+     ```python
+     output_path = "/path/to/save/report"
+     ```
+3. Run the script:
+   ```bash
+   ./video_metadata_extractor.py
+   ```
+   If the script is not executable, you can explicitly run it using Python:
    ```bash
    python3 video_metadata_extractor.py
    ```
-3. The Excel report will be saved as `video_metadata.xlsx` in the current directory.
+4. The Excel report will be saved to the specified path.
 
 ## Example Output
 The generated Excel file contains columns like:
@@ -53,3 +70,7 @@ Feel free to fork the repository and submit pull requests. Issues and feature re
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
+
+## Notes
+- The script uses the shebang `#!/usr/bin/env python3` to ensure compatibility across different systems.
+- Ensure Python 3 is installed and accessible in your system's PATH.

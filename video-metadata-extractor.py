@@ -1,13 +1,26 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
-# Simple script to get metadata from videos and save it in Excel.
-# This isn't fancy, but it works for what I need.
+"""
+Script for extracting metadata from video files and generating an Excel report.
+
+Author: Christopher Thomas
+Version: 1.6
+Date: 2024-12-09
+
+Description:
+This script processes video files from specified directories, extracts metadata
+using ffprobe, and generates an Excel report. It reports information such as
+resolution, audio/video codecs, video bitrate (in kbps), HDR/SDR status,
+container type, video frame rate, and more. It also reports all audio tracks
+with their codecs, languages, and track numbers.
+"""
 
 import os
 import glob
 import subprocess
 import json
 from openpyxl import Workbook
+
 
 def get_metadata(path):
     """Run ffprobe to extract metadata from the file."""
@@ -23,9 +36,11 @@ def get_metadata(path):
         print(f"Error reading metadata for {path}: {e}")
         return None
 
+
 def size_in_gb(path):
     """Convert file size to GB."""
-    return round(os.path.getsize(path) / (1024**3), 3)
+    return round(os.path.getsize(path) / (1024 ** 3), 3)
+
 
 def parse_framerate(rate):
     """Convert frame rate from fraction to fps."""
@@ -34,6 +49,7 @@ def parse_framerate(rate):
         return f"{num / denom:.3f} fps"
     except:
         return None
+
 
 def detect_hdr(color, transfer):
     """Guess if the video is HDR or SDR."""
@@ -45,13 +61,16 @@ def detect_hdr(color, transfer):
             return 'HDR'
     return 'SDR'
 
-def create_report(paths):
+
+def create_report(paths, output_path):
     """Main function to process files and write to Excel."""
     wb = Workbook()
     ws = wb.active
 
     # Set headers
-    ws.append(['Path', 'Size (GB)', 'Resolution', 'Audio Tracks', 'Video Codec', 'Profile', 'Bitrate (kbps)', 'Container', 'Frame Rate', 'HDR/SDR'])
+    ws.append(
+        ['Path', 'Size (GB)', 'Resolution', 'Audio Tracks', 'Video Codec', 'Profile', 'Bitrate (kbps)', 'Container',
+         'Frame Rate', 'HDR/SDR'])
 
     # Process paths
     for path in paths:
@@ -103,10 +122,32 @@ def create_report(paths):
                     hdr
                 ])
 
-    wb.save('video_metadata.xlsx')
-    print("Done. Saved as video_metadata.xlsx.")
+    # Save the Excel report
+    if not output_path.endswith('.xlsx'):
+        output_path = os.path.join(output_path, "video_metadata.xlsx")
+    try:
+        wb.save(output_path)
+        print(f"Done. Saved report to {output_path}")
+    except Exception as e:
+        print(f"Error saving report: {e}")
+
 
 if __name__ == "__main__":
-    # Directories to scan
-    dirs = ['/home/pi/usbhdd/Media/Movies', '/home/pi/usbhdd/Media/Movies02']
-    create_report(dirs)
+    """
+    Main entry point of the script.
+
+    Update the 'dirs' list with directories to scan for video files.
+    Update the 'output_path' variable with the desired path for the Excel report.
+    Example:
+        dirs = ["/path/to/videos", "/another/path/to/videos"]
+        output_path = "/path/to/save/report"
+    """
+    dirs = []  # Add your video directory paths here.
+    output_path = ""  # Specify where the Excel report should be saved.
+
+    if not dirs:
+        print("Please add your video directory paths to the 'dirs' list in the script.")
+    elif not output_path:
+        print("Please specify the output path for the Excel report in the 'output_path' variable.")
+    else:
+        create_report(dirs, output_path)
